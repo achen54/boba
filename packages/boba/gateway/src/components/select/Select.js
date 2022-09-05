@@ -114,6 +114,7 @@ function Select({
     ].join(' ')}>
       {label && <Box className={styles.label}>{label}</Box>}
       <ReactSelect
+        value={value}
         onChange={onSelect}
         isMulti={isMulti}
         options={options}

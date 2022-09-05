@@ -122,9 +122,9 @@ if (APP_CHAIN === 'rinkeby') {
 let allTokens = {}
 
 function handleChangeChainOnce(chainID_hex_string) {
-  console.log("handleChangeChainOnce: switched to chain", Number(chainID_hex_string))
+
   localStorage.setItem('chainChangedInit', true)
-  console.log("chainChangedInit", true)
+
   localStorage.setItem('newChain', Number(chainID_hex_string))
   // and remove the listner
   window.ethereum.removeListener('chainChanged', handleChangeChainOnce)
@@ -707,10 +707,8 @@ class NetworkService {
 
       if (networkGateway === 'rinkeby') {
         addresses = addresses_Rinkeby
-        console.log('Rinkeby Addresses:', addresses)
       } else if (networkGateway === 'mainnet') {
         addresses = addresses_Mainnet
-        console.log('Mainnet Addresses:', addresses)
       }
       // else if (networkGateway === 'local') {
       //     //addresses = addresses_Local
