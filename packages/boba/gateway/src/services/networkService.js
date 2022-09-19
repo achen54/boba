@@ -4193,7 +4193,7 @@ class NetworkService {
     if (!this.delegateContract) return
 
     try {
-      const delegateCheck = await this.delegateContract.attach(allAddresses.GovernorBravoDelegator)
+      const delegateCheck = await this.delegateContract.attach(allAddresses.GovernorBravoDelegatorV2)
 
       if (this.account) {
         const receipt = await delegateCheck.getReceipt(Number(proposalId), tokenId);
