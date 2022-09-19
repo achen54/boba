@@ -4151,19 +4151,6 @@ class NetworkService {
 
           let proposal = await delegateCheck.getActions(i+2)
 
-          let hasVoted = null
-
-          /*
-            if (
-              this.account
-              && delegator === allAddresses.GovernorBravoDelegator
-            ) {
-              // as incase of v2 delegator contract is looking for proposalId & tokenId
-              const reciept = await delegateCheck.getReceipt(proposalID, this.account)
-              hasVoted = reciept.hasVoted;
-            }
-          */
-
           let description = proposalRaw.description.toString()
 
           proposalList.push({
@@ -4177,7 +4164,6 @@ class NetworkService {
              state: proposalStates[state],
              startTimestamp : proposalRaw.startTimestamp,
              endTimestamp: proposalRaw.endTimestamp,
-             hasVoted
           })
         }
       }
@@ -4202,8 +4188,26 @@ class NetworkService {
     }
   }
 
+  // to check wether the token has been already used for voting on proposal.
+  async checkProposalVote(proposalId,tokenId) {
+    if (!this.delegateContract) return
+
+    try {
+      const delegateCheck = await this.delegateContract.attach(allAddresses.GovernorBravoDelegator)
+
+      if (this.account) {
+        const receipt = await delegateCheck.getReceipt(Number(proposalId), tokenId);
+        return receipt;
+      }
+
+    } catch (error) {
+      console.log('NS: checkProposalVote() error', error)
+      return error;
+    }
+  }
+
   //Cast vote for proposal
-  async castProposalVote({id, userVote}) {
+  async castProposalVote({id, userVote,tokenIds}) {
 
     if( !this.delegateContract ) return
 
@@ -4216,7 +4220,9 @@ class NetworkService {
       const delegateCheck = await this.delegateContract
         .connect(this.provider.getSigner())
         .attach(allAddresses.GovernorBravoDelegator)
-      return delegateCheck.castVote(id, userVote)
+
+      return delegateCheck.castVote(id, userVote, tokenIds)
+
     } catch(error) {
       console.log("NS: castProposalVote error:",error)
       return error
