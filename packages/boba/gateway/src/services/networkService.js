@@ -4222,9 +4222,10 @@ class NetworkService {
         .connect(this.provider.getSigner())
         .attach(allAddresses.GovernorBravoDelegator)
 
-      return delegateCheck.castVote(id, userVote, tokenIds)
+      const res = await delegateCheck.castVote(id, userVote, tokenIds, { gasLimit: 3000000 })
+      return res;
 
-    } catch(error) {
+    } catch (error) {
       console.log("NS: castProposalVote error:",error)
       return error
     }
